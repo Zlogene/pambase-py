@@ -25,23 +25,22 @@ def main():
 	parser.add_argument('--unix-extended-encryption')
 	parser.add_argument('--likeauth')
 
+	parse_templates(parser.parse_args())
+
+def parse_templates(args):
 	load = FileSystemLoader('')
 	env = Environment(loader=load)
-	args = parser.parse_args()
 
-	tmpl = env.get_template('templates/login.tpl')
-	with open("stack/login", "w+") as output:
-		render = tmpl.render(vars(args).items())
-		if render:
-			output.write(render)
-			output.write("\r\n")
+	templates = ["login", "system-auth"]
 
-	tmpl = env.get_template('templates/system-auth.tpl')
-	with open("stack/system-auth", "w+") as output:
-		render = tmpl.render(vars(args).items())
-		if render:
-			output.write(render)
-			output.write("\r\n")
+	for template_name in templates:
+		template = env.get_template('templates/{0}.tpl'.format(template_name))
+
+		with open('stack/{0}'.format(template_name), "w+") as output:
+			rendered_template = template.render(vars(args).items())
+
+			if rendered_template:
+				output.write(rendered_template + "\r\n")
 
 if __name__ == "__main__":
 	main()
