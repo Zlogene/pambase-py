@@ -6,42 +6,63 @@ from jinja2 import Template, Environment, FileSystemLoader
 def main():
 	parser = argparse.ArgumentParser(description='basic Gentoo PAM configuration files')
 	# These are actual module options
-	parser.add_argument('--libcap', help='enable pam_caps.so module')
-	parser.add_argument('--passwdqc', help='enable pam_passwdqc.so module')
-	parser.add_argument('--elogind', help='enable pam_elogind.so module')
-	parser.add_argument('--systemd', help='enable pam_systemd.so module')
-	parser.add_argument('--selinux', help='enable pam_selinux.so module')
-	parser.add_argument('--nullok', help='enable nullok option for pam_unix.so module')
-	parser.add_argument('--mktemp', help='enable pam_mktemp.so module')
-	parser.add_argument('--pam-ssh', help='enable pam_ssh.so module')
-	parser.add_argument('--securetty', help='enable pam_securetty.so module')
-	parser.add_argument('--sha512', help='enable sha512 option for pam_unix.so module')
-	parser.add_argument('--krb5', help='enable pam_krb5.so module')
-	parser.add_argument('--minimal', help='install minimalistic PAM stack')
+	parser.add_argument('--libcap', action="store_true", help='enable pam_caps.so module')
+	parser.add_argument('--passwdqc', action="store_true", help='enable pam_passwdqc.so module')
+	parser.add_argument('--elogind', action="store_true", help='enable pam_elogind.so module')
+	parser.add_argument('--systemd', action="store_true", help='enable pam_systemd.so module')
+	parser.add_argument('--selinux', action="store_true", help='enable pam_selinux.so module')
+	parser.add_argument('--nullok', action="store_true", help='enable nullok option for pam_unix.so module')
+	parser.add_argument('--mktemp', action="store_true", help='enable pam_mktemp.so module')
+	parser.add_argument('--pam-ssh', action="store_true", help='enable pam_ssh.so module')
+	parser.add_argument('--securetty', action="store_true", help='enable pam_securetty.so module')
+	parser.add_argument('--sha512', action="store_true", help='enable sha512 option for pam_unix.so module')
+	parser.add_argument('--krb5', action="store_true", help='enable pam_krb5.so module')
+	parser.add_argument('--minimal', action="store_true", help='install minimalistic PAM stack')
 
-	# Settings which can change behaviour
-	# TODO: Maybe use a different argument type here vs modules? e.g. --add-modules?
-	parser.add_argument('--debug', help='add debug option to the stack')
-	parser.add_argument('--unix-extended-encryption')
-	parser.add_argument('--likeauth')
+	parsed_args = parser.parse_args()
+	processed = process_args(parsed_args)
 
+	parse_templates(processed)
+
+def process_args(args):
+	blank_variables = ["krb5_authtok", "unix_authtok", "unix_extended_encryption",
+					   "likeauth", "nullok"]
+
+	# create a blank dictionary
+	# then add in our parsed args
+	output = dict.fromkeys(blank_variables, "")
+	output.update(vars(args))
+
+	if args.krb5 and args.passwdqc:
+		output["krb5_authtok"] = "use_authtok"
+
+	if args.krb5 or args.passwdqc:
+		output["unix_authtok"] = "use_authtok"
+
+	# uncondtional variables
+	output["debug"] = "debug"
+	output["nullok"] = "nullok"
+
+	if args.krb5:
+		output["krb5_params"] = "{0} ignore_root try_first_pass".format("debug").strip()
+
+	return output
+
+
+def parse_templates(processed_args):
 	load = FileSystemLoader('')
 	env = Environment(loader=load)
-	args = parser.parse_args()
 
-	tmpl = env.get_template('templates/login.tpl')
-	with open("stack/login", "w+") as output:
-		render = tmpl.render(vars(args).items())
-		if render:
-			output.write(render)
-			output.write("\r\n")
+	templates = ["login", "system-auth"]
 
-	tmpl = env.get_template('templates/system-auth.tpl')
-	with open("stack/system-auth", "w+") as output:
-		render = tmpl.render(vars(args).items())
-		if render:
-			output.write(render)
-			output.write("\r\n")
+	for template_name in templates:
+		template = env.get_template('templates/{0}.tpl'.format(template_name))
+
+		with open('stack/{0}'.format(template_name), "w+") as output:
+			rendered_template = template.render(processed_args)
+
+			if rendered_template:
+				output.write(rendered_template + "\r\n")
 
 if __name__ == "__main__":
 	main()
