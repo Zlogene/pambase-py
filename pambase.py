@@ -2,6 +2,7 @@
 
 import argparse
 from jinja2 import Template, Environment, FileSystemLoader
+import os
 
 def main():
 	parser = argparse.ArgumentParser(description='basic Gentoo PAM configuration files')
@@ -25,6 +26,10 @@ def main():
 	parse_templates(processed)
 
 def process_args(args):
+	# make sure that output
+	# directory exists
+	os.mkdir('stack')
+
 	blank_variables = ["krb5_authtok", "unix_authtok", "unix_extended_encryption",
 					   "likeauth", "nullok"]
 
