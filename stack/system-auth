@@ -1,3 +1,6 @@
-password	required	pam_unix.so try_first_pass    debug
-## This is needed to make sure that the Kerberos skip-on-success won't cause a bad jump.
+auth            required	pam_faillock.so preauth silent audit deny=3 unlock_time=600
+auth            sufficient	pam_unix.so nullok try_first_pass
+auth            [default=die]   pam_faillock.so authfail audit deny=3 unlock_time=600
+password	[success=1 default=ignore]	pam_krb5.so debug ignore_root try_first_pass
+password	required	pam_unix.so try_first_pass use_authtok nullok  debug
 password	optional	pam_permit.so
