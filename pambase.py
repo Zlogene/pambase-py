@@ -12,13 +12,14 @@ def main():
 	parser.add_argument('--elogind', action="store_true", help='enable pam_elogind.so module')
 	parser.add_argument('--systemd', action="store_true", help='enable pam_systemd.so module')
 	parser.add_argument('--selinux', action="store_true", help='enable pam_selinux.so module')
-	parser.add_argument('--nullok', action="store_true", help='enable nullok option for pam_unix.so module')
 	parser.add_argument('--mktemp', action="store_true", help='enable pam_mktemp.so module')
 	parser.add_argument('--pam-ssh', action="store_true", help='enable pam_ssh.so module')
 	parser.add_argument('--securetty', action="store_true", help='enable pam_securetty.so module')
 	parser.add_argument('--sha512', action="store_true", help='enable sha512 option for pam_unix.so module')
 	parser.add_argument('--krb5', action="store_true", help='enable pam_krb5.so module')
 	parser.add_argument('--minimal', action="store_true", help='install minimalistic PAM stack')
+	parser.add_argument('--debug', action="store_true", help='enable debug for selected modules')
+	parser.add_argument('--nullok', action="store_true", help='enable nullok option for pam_unix.so module')
 
 	parsed_args = parser.parse_args()
 	processed = process_args(parsed_args)
@@ -44,9 +45,11 @@ def process_args(args):
 	if args.krb5 or args.passwdqc:
 		output["unix_authtok"] = "use_authtok"
 
-	# uncondtional variables
-	output["debug"] = "debug"
-	output["nullok"] = "nullok"
+	if args.debug:
+		output["debug"] = "debug"
+
+	if args.nullok:
+		output["nullok"] = "nullok"
 
 	if args.krb5:
 		output["krb5_params"] = "{0} ignore_root try_first_pass".format("debug").strip()
