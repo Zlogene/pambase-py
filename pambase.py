@@ -59,7 +59,7 @@ def parse_templates(processed_args):
 	env = Environment(loader=load)
 
 	templates = ["login", "other", "system-local-login", "system-remote-login",
-	"system-auth"]
+	"su", "system-auth"]
 
 	for template_name in templates:
 		template = env.get_template('templates/{0}.tpl'.format(template_name))
