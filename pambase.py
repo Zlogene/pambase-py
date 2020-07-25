@@ -39,6 +39,8 @@ def process_args(args):
 	output = dict.fromkeys(blank_variables, "")
 	output.update(vars(args))
 
+	output["likeauth"] = "likeauth"
+
 	if args.krb5 and args.passwdqc:
 		output["krb5_authtok"] = "use_authtok"
 
