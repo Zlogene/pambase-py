@@ -56,6 +56,11 @@ def process_args(args):
 	if args.krb5:
 		output["krb5_params"] = "{0} ignore_root try_first_pass".format("debug").strip()
 
+	if args.sha512:
+		output["unix_extended_encryption"] = "sha512 shadow"
+	else:
+		output["unix_extended_encryption"] = "md5 shadow"
+
 	return output
 
 
