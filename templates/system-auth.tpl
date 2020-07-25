@@ -16,3 +16,17 @@ password	[success=1 default=ignore]	pam_krb5.so {{ krb5_params }}
 {% endif -%}
 password	required	pam_unix.so try_first_pass {{ unix_authtok|default('', true) }} {{ nullok|default('', true) }} {{ unix_extended_encryption|default('', true) }} {{ debug|default('', true) }}
 password	optional	pam_permit.so
+{% if pam_ssh -%}
+session		optional	pam_ssh.so
+{% endif -%}
+{% if systemd -%}
+-session        optional        pam_systemd.so
+{% endif -%}
+{% if elogind -%}
+-session        optional        pam_elogind.so
+{% endif -%}
+{% if libcap -%}
+-session        optional        pam_libcap.so
+{% endif -%}
+
+{% include "system-session.tpl" ignore missing %}
