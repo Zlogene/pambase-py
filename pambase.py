@@ -39,12 +39,7 @@ def process_args(args):
 	output.update(vars(args))
 
 	output["likeauth"] = "likeauth"
-
-	if args.krb5 and args.passwdqc:
-		output["krb5_authtok"] = "use_authtok"
-
-	if args.krb5 or args.passwdqc:
-		output["unix_authtok"] = "use_authtok"
+	output["unix_authok"] = "use_authok"
 
 	if args.debug:
 		output["debug"] = "debug"
