@@ -27,8 +27,7 @@ def main():
 	parse_templates(processed)
 
 def process_args(args):
-	# make sure that output
-	# directory exists
+	# make sure that output directory exists
 	pathlib.Path("stack").mkdir(parents=True, exist_ok=True)
 
 	blank_variables = ["krb5_authtok", "unix_authtok", "unix_extended_encryption",
@@ -68,8 +67,8 @@ def parse_templates(processed_args):
 	load = FileSystemLoader('')
 	env = Environment(loader=load)
 
-	templates = ["login", "other", "system-local-login", "system-remote-login",
-	"su", "system-auth"]
+	templates = ["login", "other", "passwd", "system-local-login",
+	"system-remote-login", "su", "system-auth"]
 
 	for template_name in templates:
 		template = env.get_template('templates/{0}.tpl'.format(template_name))
