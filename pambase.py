@@ -16,6 +16,7 @@ def main():
 	parser.add_argument('--pam-ssh', action="store_true", help='enable pam_ssh.so module')
 	parser.add_argument('--securetty', action="store_true", help='enable pam_securetty.so module')
 	parser.add_argument('--sha512', action="store_true", help='enable sha512 option for pam_unix.so module')
+	parser.add_argument('--consolekit', action="store_true", help='enable pam_consolekit.so module')
 	parser.add_argument('--krb5', action="store_true", help='enable pam_krb5.so module')
 	parser.add_argument('--minimal', action="store_true", help='install minimalistic PAM stack')
 	parser.add_argument('--debug', action="store_true", help='enable debug for selected modules')
@@ -61,7 +62,7 @@ def parse_templates(processed_args):
 	load = FileSystemLoader('')
 	env = Environment(loader=load)
 
-	templates = ["login", "other", "passwd", "system-local-login", "system-remote-login", "su", "system-auth", "system-service"]
+	templates = ["login", "other", "passwd", "system-local-login", "system-remote-login", "su", "system-auth", "system-login", "system-service"]
 
 	for template_name in templates:
 		template = env.get_template('templates/{0}.tpl'.format(template_name))
