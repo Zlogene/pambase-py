@@ -7,7 +7,6 @@ import pathlib
 
 def main():
 	parser = argparse.ArgumentParser(description='basic Gentoo PAM configuration files')
-	# These are actual module options
 	parser.add_argument('--libcap', action="store_true", help='enable pam_caps.so module')
 	parser.add_argument('--passwdqc', action="store_true", help='enable pam_passwdqc.so module')
 	parser.add_argument('--elogind', action="store_true", help='enable pam_elogind.so module')
@@ -62,7 +61,7 @@ def parse_templates(processed_args):
 	load = FileSystemLoader('')
 	env = Environment(loader=load)
 
-	templates = ["login", "other", "passwd", "system-local-login", "system-remote-login", "su", "system-auth"]
+	templates = ["login", "other", "passwd", "system-local-login", "system-remote-login", "su", "system-auth", "system-service"]
 
 	for template_name in templates:
 		template = env.get_template('templates/{0}.tpl'.format(template_name))
