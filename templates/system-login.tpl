@@ -1,5 +1,5 @@
 auth		required	pam_shells.so {{ debug|default('', true) }}
-auth		required	pam_nologin.so 
+auth		required	pam_nologin.so
 auth		include		system-auth
 {% if not minimal -%}
 auth            required        pam_faillock.so preauth silent audit deny=3 unlock_time=600
@@ -8,7 +8,7 @@ auth            [default=die]   pam_faillock.so authfail audit deny=3 unlock_tim
 {% endif -%}
 
 account		required	pam_access.so {{ debug|default('', true) }}
-account		required	pam_nologin.so 
+account		required	pam_nologin.so
 account		include		system-auth
 {% if not minimal -%}
 account         required        pam_faillock.so
