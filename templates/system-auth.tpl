@@ -10,8 +10,8 @@ auth        [success=1 default=ignore]      pam_krb5.so {{ krb5_params }}
 auth		required	pam_unix.so try_first_pass {{ likeauth }} {{ nullok|default('', true) }} {{ debug|default('', true) }}
 auth		optional	pam_permit.so
 {% if not minimal -%}
-auth            required	pam_faillock.so preauth silent audit deny=3 unlock_time=600
-auth            sufficient	pam_unix.so {{ nullok|default('', true) }} try_first_pass
+auth            required        pam_faillock.so preauth silent audit deny=3 unlock_time=600
+auth            sufficient      pam_unix.so {{ nullok|default('', true) }} try_first_pass
 auth            [default=die]   pam_faillock.so authfail audit deny=3 unlock_time=600
 {% endif -%}
 
@@ -34,6 +34,7 @@ password	[success=1 default=ignore]	pam_krb5.so {{ krb5_params }}
 
 password	required	pam_unix.so try_first_pass {{ unix_authtok|default('', true) }} {{ nullok|default('', true) }} {{ unix_extended_encryption|default('', true) }} {{ debug|default('', true) }}
 password	optional	pam_permit.so
+
 {% if pam_ssh -%}
 session		optional	pam_ssh.so
 {% endif -%}

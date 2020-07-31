@@ -47,7 +47,7 @@ def process_args(args):
 
 	# unconditional variables
 	output["likeauth"] = "likeauth"
-	output["unix_authok"] = "use_authok"
+	output["unix_authtok"] = "use_authtok"
 
 	if args.debug:
 		output["debug"] = "debug"
@@ -89,7 +89,7 @@ def parse_templates(processed_args):
 			rendered_template = template.render(processed_args)
 
 			if rendered_template:
-				output.write(rendered_template + "\r\n")
+				output.write(rendered_template + "\n")
 
 
 if __name__ == "__main__":
