@@ -25,10 +25,6 @@ session		required	pam_env.so envfile=/etc/profile.env {{ debug|default('', true)
 session		optional	pam_lastlog.so silent {{ debug|default('', true) }}
 {% endif -%}
 session		include		system-auth
-{% if consolekit -%}
-session		optional	pam_ck_connector.so nox11
-{% endif -%}
-
 {% if selinux -%}
  # Note: modules that run in the user's context must come after this line.
 session		required	pam_selinux.so multiple open

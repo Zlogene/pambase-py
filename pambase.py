@@ -16,7 +16,6 @@ def main():
 	parser.add_argument('--pam-ssh', action="store_true", help='enable pam_ssh.so module')
 	parser.add_argument('--securetty', action="store_true", help='enable pam_securetty.so module')
 	parser.add_argument('--sha512', action="store_true", help='enable sha512 option for pam_unix.so module')
-	parser.add_argument('--consolekit', action="store_true", help='enable pam_consolekit.so module')
 	parser.add_argument('--krb5', action="store_true", help='enable pam_krb5.so module')
 	parser.add_argument('--minimal', action="store_true", help='install minimalistic PAM stack')
 	parser.add_argument('--debug', action="store_true", help='enable debug for selected modules')
