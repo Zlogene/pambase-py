@@ -47,8 +47,8 @@ session		optional	pam_ssh.so
 -session        optional        pam_elogind.so
 {% endif -%}
 
-{%- if libcap -%}
+{% if libcap -%}
 -session        optional        pam_libcap.so
-{%- endif -%}
+{% endif -%}
 
 {% include "templates/system-session.tpl" %}
